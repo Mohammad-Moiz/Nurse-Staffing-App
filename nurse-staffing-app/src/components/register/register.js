@@ -1,15 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import useDarkMode from "@/hooks/useDarkMode";
-import RegForm from "./common/reg-from";
+import useDarkMode from "..//hooks/useDarkMode";
+import RegForm from "./common/reg-form";
 import Social from "./common/social";
 import { ToastContainer } from "react-toastify";
 
-import LogoWhite from "@/assets/images/logo/nurse-staffing.jpg";
-import Logo from "@/assets/images/logo/nurse-staffing.jpg";
-import Illustration from "@/assets/images/auth/nurse-logo.png";
+import LogoWhite from "../assets/images/logo/nurse-staffing.jpg";
+import Logo from "../assets/images/logo/nurse-staffing.jpg";
+import Illustration from "../assets/images/auth/nurse-logo.png";
 
-const register = () => {
+const Register = () => {
   const [isDark] = useDarkMode();
   return (
     <>
@@ -86,4 +86,4 @@ const register = () => {
   );
 };
 
-export default register;
+export default Register;

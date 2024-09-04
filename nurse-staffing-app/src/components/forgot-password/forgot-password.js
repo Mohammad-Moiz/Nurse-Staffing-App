@@ -7,7 +7,7 @@ import LogoWhite from "../assets/images/svg/nurse-staffing.jpg";
 import Logo from "../assets/images/svg/nurse-staffing.jpg";
 import Illustration from "../assets/images/auth/nurse-logo.png";
 
-const forgotPass = () => {
+const ForgotPassword = () => {
   const [isDark] = useDarkMode();
   return (
     <>
@@ -73,4 +73,4 @@ const forgotPass = () => {
   );
 };
 
-export default forgotPass;
+export default ForgotPassword;

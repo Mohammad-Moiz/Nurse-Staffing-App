@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
-import Textinput from "@/components/ui/Textinput";
+import Textinput from "../../ui/Textinput";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import Checkbox from "@/components/ui/Checkbox";
-import { useDispatch, useSelector } from "react-redux";
+import Checkbox from "../../ui/Checkbox";
+import { useDispatch } from "react-redux";
 import { handleRegister } from "./store";
 
 const schema = yup
