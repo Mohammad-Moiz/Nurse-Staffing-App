@@ -87,8 +87,6 @@ export const authSlice = createSlice({
       toast.success("User logged out successfully", {
         position: "top-right",
       });
-      // useNavigate("/")
-      // navigate("/");
     },
   },
 });

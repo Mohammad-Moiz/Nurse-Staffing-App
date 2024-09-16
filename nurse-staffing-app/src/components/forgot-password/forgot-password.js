@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import ForgotPass from "./common/forgot-pass";
 import useDarkMode from "../hooks/useDarkMode";
 import { ToastContainer } from "react-toastify";
+
 import LogoWhite from "../assets/images/svg/nurse-staffing.jpg";
 import Logo from "../assets/images/svg/nurse-staffing.jpg";
 import Illustration from "../assets/images/auth/nurse-logo.png";
+import './forgot-password.css';
 
 const ForgotPassword = () => {
   const [isDark] = useDarkMode();

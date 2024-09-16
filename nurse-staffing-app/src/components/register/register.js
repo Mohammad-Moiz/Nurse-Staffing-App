@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import LogoWhite from "../assets/images/logo/nurse-staffing.jpg";
 import Logo from "../assets/images/logo/nurse-staffing.jpg";
 import Illustration from "../assets/images/auth/nurse-logo.png";
+import './register.css';
 
 const Register = () => {
   const [isDark] = useDarkMode();
@@ -22,13 +23,12 @@ const Register = () => {
               <Link to="/">
                 <img src={isDark ? LogoWhite : Logo} alt="" className="mb-10" />
               </Link>
-
-              <h4>
-                Unlock your Project
-                <span className="text-slate-800 dark:text-slate-400 font-bold">
-                  performance
-                </span>
-              </h4>
+              <div className="title-container">
+                <h1 className="title">
+                  Nurse Staffing App
+                      <span className="highlight"></span>
+                </h1>
+              </div>
             </div>
             <div className="absolute left-0 bottom-[-130px] h-full w-full z-[-1]">
               <img

@@ -1,6 +1,6 @@
 const themeConfig = {
   app: {
-    name: "Rare React",
+    name: "Nurse Staffing React",
   },
   // layout
   layout: {

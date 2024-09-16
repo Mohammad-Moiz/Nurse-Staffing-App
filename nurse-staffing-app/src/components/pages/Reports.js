@@ -1,82 +1,87 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const mockData = {
-  staff: [
-    { id: 1, name: 'Jhon Wick', designation: 'RN I', jobsCompleted: 8 },
-    { id: 2, name: 'Sam Jackson', designation: 'RN II', jobsCompleted: 10 },
-    // More mock staff data...
-  ],
-  students: [
-    { id: 1, name: 'Emily Wilson', status: 'Active', assignments: 5 },
-    { id: 2, name: 'Sam Jackson', status: 'Completed', assignments: 8 },
-    // More mock student data...
-  ],
-  jobs: [
-    { id: 1, title: 'Morning Route 5', status: 'Active', assignedStaff: 'Jhon Wick' },
-    { id: 2, title: 'Afternoon Route 4', status: 'Completed', assignedStaff: 'Sam Jackson' },
-    // More mock job data...
-  ],
-};
+const Reports = () => {
+  const [reports, setReports] = useState([]);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [error, setError] = useState(null);
 
-function Reports() {
-  const [reportType, setReportType] = useState('staff');
-  const [reportData, setReportData] = useState([]);
+  useEffect(() => {
+    // Fetch all reports from the backend
+    const fetchReports = async () => {
+      try {
+        const response = await axios.get('/api/reports', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        setReports(response.data);
+      } catch (err) {
+        setError('Error fetching reports');
+      }
+    };
 
-  const handleGenerateReport = () => {
-    // Generate the report based on the selected type
-    setReportData(mockData[reportType]);
-  };
+    fetchReports();
+  }, []);
 
-  const handleExportCSV = () => {
-    const csvData = reportData.map((row) => Object.values(row).join(',')).join('\n');
-    const blob = new Blob([csvData], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `${reportType}-report.csv`);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  const handleGenerateReport = async () => {
+    if (!title.trim() || !content.trim()) {
+      setError('Title and content are required');
+      return;
+    }
+
+    try {
+      const response = await axios.post('/api/reports', {
+        userId: localStorage.getItem('userId'), // Replace with actual user ID retrieval
+        reportData: { title, content }
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      setReports([...reports, response.data]);
+      setTitle('');
+      setContent('');
+      setError(null);
+    } catch (err) {
+      setError('Error generating report');
+    }
   };
 
   return (
-    <div>
-      <h1>Generate Reports</h1>
-      <p>Select the type of report you want to generate:</p>
-      <select value={reportType} onChange={(e) => setReportType(e.target.value)}>
-        <option value="staff">Staff Report</option>
-        <option value="students">Student Report</option>
-        <option value="jobs">Job Report</option>
-      </select>
-      <button onClick={handleGenerateReport}>Generate Report</button>
-
-      {reportData.length > 0 && (
-        <div>
-          <h2>{`${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report`}</h2>
-          <table border="1">
-            <thead>
-              <tr>
-                {Object.keys(reportData[0]).map((key) => (
-                  <th key={key}>{key}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {reportData.map((item) => (
-                <tr key={item.id}>
-                  {Object.values(item).map((value, index) => (
-                    <td key={index}>{value}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <button onClick={handleExportCSV}>Export as CSV</button>
-        </div>
-      )}
+    <div className="reports-container">
+      <h1>Reports Management</h1>
+      {error && <p className="error">{error}</p>}
+      <div className="reports-list">
+        {reports.map((report) => (
+          <div key={report._id} className="report-item">
+            <h3>{report.reportData.title}</h3>
+            <p>{report.reportData.content}</p>
+            <p><strong>User:</strong> {report.user.name}</p>
+            <span>{new Date(report.createdAt).toLocaleString()}</span>
+          </div>
+        ))}
+      </div>
+      <div className="report-form">
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Report Title"
+        />
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Report Content"
+        />
+        <button onClick={handleGenerateReport}>Generate Report</button>
+      </div>
     </div>
   );
-}
+};
 
 export default Reports;

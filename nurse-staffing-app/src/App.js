@@ -1,52 +1,27 @@
-import React, { lazy, Suspense, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Loading from "./Loading";
-import { useRoleQuery } from "./roleApi";
+import './App.css';
+import './index.css';
 
 const Login = lazy(() => import("./components/login/login"));
 const Register = lazy(() => import("./components/register/register"));
 const ForgotPass = lazy(() => import("./components/forgot-password/forgot-password"));
+const Dashboard = lazy(() => import("./components/dashboard/dashboard"));
 
 function App() {
   const auth = localStorage.getItem('isAuth');
-  const userData = JSON.parse(auth);
-  const { data, isSuccess } = useRoleQuery(userData?.roleid);
-
-  // Effect that uses both data and isSuccess
-  useEffect(() => {
-    if (data && isSuccess) {
-      // Do something with data
-    }
-  }, [data, isSuccess]);
 
   return (
     <main className="App relative">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<Loading />}>
-              <Login />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <Suspense fallback={<Loading />}>
-              <Register />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <Suspense fallback={<Loading />}>
-              <ForgotPass />
-            </Suspense>
-          }
-        />
-      </Routes>
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path="/" element={auth ? <Navigate to="/dashboard" /> : <Login />} />
+          <Route path="/register" element={auth ? <Navigate to="/dashboard" /> : <Register />} />
+          <Route path="/forgot-password" element={auth ? <Navigate to="/dashboard" /> : <ForgotPass />} />
+          <Route path="/dashboard" element={auth ? <Dashboard /> : <Navigate to="/" />} />
+        </Routes>
+      </Suspense>
     </main>
   );
 }
