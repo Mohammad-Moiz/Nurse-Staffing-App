@@ -14,6 +14,11 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
 /* Center content in the main container */
 .App.relative {
   position: relative;
